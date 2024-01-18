@@ -48,7 +48,12 @@ def get_obstruction_details(valid_shapes):
             if shape in valid_shapes:
                 dimensions = {}
                 for dimension in valid_shapes[shape]:
-                    dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
+                    while True:
+                        try:
+                            dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
+                            break
+                        except ValueError:
+                            print(f"Invalid input. Please enter a valid number for {dimension}.")
                 obstructions.append(Obstruction(shape, dimensions))
                 print(f"You have {num_obstructions} obstruction(s).")
             else:
@@ -124,9 +129,9 @@ def main():
     )
 
     # Define paint brands with their respective prices and bucket sizes
-    delux_paint = Paint('Delux', [[('8.80', 2.5)], [('4.00', 5.0)]])
-    layland_paint = Paint('Layland', [[('5.20', 2.5)], [('2.20', 5.0)]])
-    goodhome_paint = Paint('Goodhome', [[('6.40', 2.5)], [('3.20', 5.0)]])
+    delux_paint = Paint('Delux', [[('22', 2.5)], [('40', 5.0)]])
+    layland_paint = Paint('Layland', [[('18', 2.5)], [('33', 5.0)]])
+    goodhome_paint = Paint('Goodhome', [[('10', 2.5)], [('16', 5.0)]])
 
     brands = [delux_paint, layland_paint, goodhome_paint]
 
