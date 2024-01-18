@@ -69,12 +69,13 @@ total_obstruction_size = sum((ob.width * ob.height for ob in obstruction_list), 
 # Calculate paint needed considering obstructions
 paint_needed = ((wall_size - total_obstruction_size) / 6) * coats
 
-print(f"You will need {paint_needed} litres of paint to paint walls with a total area of {wall_size} square meters.")
+print(f"With {len(obstruction_list)} obstruction(s) totaling {total_obstruction_size:.2f} square meters, you will need {paint_needed:.2f} litres of paint to paint walls with a total area of {wall_size:.2f} square meters.")
+
 
 
 # Define paint brands with their respective prices and bucket sizes
 delux_paint = Paint('Delux', [[('8.80', 2.5)], [('4.00', 5.0)]])
-layland_paint = Paint('Layland', [[('2.20', 2.5)], [('2.20', 5.0)]])
+layland_paint = Paint('Layland', [[('5.20', 2.5)], [('2.20', 5.0)]])
 goodhome_paint = Paint('Goodhome', [[('6.40', 2.5)], [('3.20', 5.0)]])
 
 brands = [delux_paint, layland_paint, goodhome_paint]
