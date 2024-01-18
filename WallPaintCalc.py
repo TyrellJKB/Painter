@@ -109,13 +109,33 @@ def main():
         }
 
         # Get wall dimensions
-        height = float(input("Enter the height of the walls in meters: "))
-        width = float(input("Enter the width of the walls in meters: "))
+        while True:
+            try:
+                height = float(input("Enter the height of the walls in meters: "))
+                width = float(input("Enter the width of the walls in meters: "))
+
+                if height <= 0 or width <= 0:
+                    raise ValueError("Please enter positive numbers for height and width.")
+
+                # If the input is valid (positive numbers), break out of the loop
+                break
+
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
 
         # Calculate wall size in square meters
         wall_size = height * width
 
-        coats = int(input("Enter the number of coats you want to apply to your wall: "))
+        while True:
+            try:
+                coats = int(input("Enter the number of coats you want to apply to your wall: "))
+
+                if coats <= 0:
+                    raise ValueError("Please enter a positive number for the number of coats.")
+                break
+
+            except ValueError:
+                print("Invalid input. Please enter a valid integer.")
 
         # Get obstruction details
         obstruction_list = get_obstruction_details(valid_shapes)
@@ -147,7 +167,7 @@ def main():
             min_cost, min_combination = calculate_paint_cost(paint_needed, selected_paint.pricing_options)
 
             print(f"The cheapest combination for {paint_needed} litres of {selected_paint.brand} paint is:")
-            buckets_needed = 0  # Initialize buckets_needed outside the loop
+            buckets_needed = 0
             for price, bucket_size in min_combination:
                 buckets_needed = math.ceil(paint_needed / bucket_size)
                 print(f"   {buckets_needed} buckets of {bucket_size} litres at £{price} per litre")
