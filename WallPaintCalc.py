@@ -32,28 +32,31 @@ def get_obstruction_details(valid_shapes):
         if num_obstructions.lower() == 'next':
             break
 
-        try:
-            num_obstructions = int(num_obstructions)
-        except ValueError:
-            print("Please enter a valid number or 'next'.")
-            continue
+        while True:
+            try:
+                num_obstructions = int(num_obstructions)
+                break
+            except ValueError:
+                print("Please enter a valid number or 'next'.")
 
         for i in range(1, num_obstructions + 1):
             shape = input(f"Enter the shape of obstruction {i} ({', '.join(valid_shapes)}): ").lower()
 
-            if shape in valid_shapes:
-                dimensions = {}
-                for dimension in valid_shapes[shape]:
-                    while True:
-                        try:
-                            dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
-                            break
-                        except ValueError:
-                            print(f"Invalid input. Please enter a valid number for {dimension}.")
-                obstructions.append(Obstruction(shape, dimensions))
-                print(f"You have added {num_obstructions} obstruction(s).")
-            else:
+            while shape not in valid_shapes:
                 print(f"Invalid shape. Please enter one of: {', '.join(valid_shapes)}.")
+                shape = input(f"Enter the shape of obstruction {i} ({', '.join(valid_shapes)}): ").lower()
+
+            dimensions = {}
+            for dimension in valid_shapes[shape]:
+                while True:
+                    try:
+                        dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
+                        break
+                    except ValueError:
+                        print(f"Invalid input. Please enter a valid number for {dimension}.")
+
+            obstructions.append(Obstruction(shape, dimensions))
+            print(f"You have added {i} obstruction(s).")
 
     return obstructions
 
