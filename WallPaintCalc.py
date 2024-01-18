@@ -4,10 +4,9 @@ class Paint:
         self.pricing_options = pricing_options
 
 class Obstruction:
-    def __init__(self, shape, width=None, height=None):
+    def __init__(self, shape, dimensions):
         self.shape = shape
-        self.width = width
-        self.height = height
+        self.dimensions = dimensions
 
 def calculate_paint_cost(wall_size, coats, obstructions, paint_needed, pricing_options):
     min_cost = float('inf')
@@ -26,7 +25,7 @@ def calculate_paint_cost(wall_size, coats, obstructions, paint_needed, pricing_o
     return min_cost, min_combination
 
 
-def get_obstruction_details():
+def get_obstruction_details(valid_shapes):
     obstructions = []
 
     while True:
@@ -42,16 +41,27 @@ def get_obstruction_details():
             continue
 
         for i in range(1, num_obstructions + 1):
-            shape = input(f"Enter the shape of obstruction {i} (e.g., square, rectangle): ").lower()
+            shape = input(f"Enter the shape of obstruction {i} ({', '.join(valid_shapes)}): ").lower()
 
-            if shape in ['square', 'rectangle']:
-                width = float(input(f"Enter the width of obstruction {i} in meters: "))
-                height = float(input(f"Enter the height of obstruction {i} in meters: "))
-                obstructions.append(Obstruction(shape, width, height))
+            if shape in valid_shapes:
+                dimensions = {}
+                for dimension in valid_shapes[shape]:
+                    dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
+                obstructions.append(Obstruction(shape, dimensions))
             else:
-                print("Invalid shape. Please enter 'square' or 'rectangle'.")
+                print(f"Invalid shape. Please enter one of: {', '.join(valid_shapes)}.")
 
     return obstructions
+
+# Get obstruction details with valid shapes
+valid_shapes = {
+    'square': ['side'],
+    'rectangle': ['width', 'height'],
+    'triangle': ['base', 'height'],
+    'semi_circle': ['radius'],
+    'circle': ['radius'],
+    'crescent_moon': ['outer_radius', 'inner_radius'],
+}
 
 # Get wall dimensions
 height = float(input("Enter the height of the walls in meters: "))
@@ -63,8 +73,27 @@ wall_size = height * width
 coats = int(input("Enter the number of coats you want to apply to your wall: "))
 
 # Get obstruction details
-obstruction_list = get_obstruction_details()
-total_obstruction_size = sum((ob.width * ob.height for ob in obstruction_list), 0)
+obstruction_list = get_obstruction_details(valid_shapes)
+
+def calculate_obstruction_size(ob):
+    if ob.shape == 'square':
+        return ob.dimensions['side'] * ob.dimensions['side']
+    elif ob.shape == 'rectangle':
+        return ob.dimensions['width'] * ob.dimensions['height']
+    elif ob.shape == 'triangle':
+        return 0.5 * ob.dimensions['base'] * ob.dimensions['height']
+    elif ob.shape == 'semi_circle':
+        return 0.5 * 3.1415 * ob.dimensions['radius'] * ob.dimensions['radius']
+    elif ob.shape == 'circle':
+        return 3.1415 * ob.dimensions['radius'] * ob.dimensions['radius']
+    elif ob.shape == 'crescent_moon':
+        outer_area = 3.1415 * ob.dimensions['outer_radius'] * ob.dimensions['outer_radius']
+        inner_area = 3.1415 * ob.dimensions['inner_radius'] * ob.dimensions['inner_radius']
+        return outer_area - inner_area
+    else:
+        raise ValueError(f"Unsupported shape: {ob.shape}")
+
+total_obstruction_size = sum(calculate_obstruction_size(ob) for ob in obstruction_list)
 
 # Calculate paint needed considering obstructions
 paint_needed = ((wall_size - total_obstruction_size) / 6) * coats
