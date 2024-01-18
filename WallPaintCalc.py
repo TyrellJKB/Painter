@@ -32,23 +32,20 @@ print(f"You will need {paint_needed} litres of paint to paint walls with a total
 
 # Brand selection
 print("Available brands:")
-for paint in brands:
-    print(paint.brand)
+for i, paint in enumerate(brands, start=1):
+    print(f"{i}. {paint.brand}")
 
-selected_brand = input("Choose a paint brand from the list: ")
+selected_brand_index = int(input("Choose a paint brand number from the list: ")) - 1
 
-# Find the selected brand object
-selected_paint = next((paint for paint in brands if paint.brand.lower() == selected_brand.lower()), None)
-
-if selected_paint:
+if 0 <= selected_brand_index < len(brands):
+    selected_paint = brands[selected_brand_index]
     total_cost = calculate_paint_cost(wall_size, coats, obstructions, paint_needed, selected_paint)
     print(f"The total cost for {paint_needed} litres of {selected_paint.brand} paint is £{total_cost:.2f}.")
 else:
     print("Invalid brand selection.")
 
+
 """
-Tape measurements only
-THere can be obstructions
 Those obstructions can be different shapes and sizes
 Do it wall by wall and save the results
 What size are the walls
