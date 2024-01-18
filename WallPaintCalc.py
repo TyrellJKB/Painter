@@ -1,17 +1,14 @@
 import math
 
-
 class Paint:
     def __init__(self, brand, pricing_options):
         self.brand = brand
         self.pricing_options = pricing_options
 
-
 class Obstruction:
     def __init__(self, shape, dimensions):
         self.shape = shape
         self.dimensions = dimensions
-
 
 def calculate_paint_cost(paint_needed, pricing_options):
     min_cost = float('inf')
@@ -25,7 +22,6 @@ def calculate_paint_cost(paint_needed, pricing_options):
             min_combination = combination
 
     return min_cost, min_combination
-
 
 def get_obstruction_details(valid_shapes):
     obstructions = []
@@ -55,7 +51,7 @@ def get_obstruction_details(valid_shapes):
                         except ValueError:
                             print(f"Invalid input. Please enter a valid number for {dimension}.")
                 obstructions.append(Obstruction(shape, dimensions))
-                print(f"You have {num_obstructions} obstruction(s).")
+                print(f"You have added {num_obstructions} obstruction(s).")
             else:
                 print(f"Invalid shape. Please enter one of: {', '.join(valid_shapes)}.")
 
@@ -92,6 +88,9 @@ def calculate_obstruction_size(ob):
 
 
 def main():
+    print("Welcome to the Paint Estimation Tool!")
+    print("This tool helps you estimate the amount of paint needed for your walls, considering obstructions.")
+
     while True:
         # Get obstruction details with valid shapes
         valid_shapes = {
@@ -146,7 +145,7 @@ def main():
         paint_needed = ((wall_size - total_obstruction_size) / 6) * coats
 
         print(
-            f"With {len(obstruction_list)} obstruction(s) totaling {total_obstruction_size:.2f} square meters, you will need {paint_needed:.2f} litres of paint to paint walls with a total area of {wall_size:.2f} square meters."
+            f"With {len(obstruction_list)} obstruction(s) totaling {total_obstruction_size:.2f} square meters, you will need {paint_needed:.2f} liters of paint to paint walls with a total area of {wall_size:.2f} square meters."
         )
 
         # Define paint brands with their respective prices and bucket sizes
@@ -156,7 +155,7 @@ def main():
 
         brands = [delux_paint, layland_paint, goodhome_paint]
 
-        print("Available brands:")
+        print("\nAvailable paint brands:")
         for i, paint in enumerate(brands, start=1):
             print(f"{i}. {paint.brand}")
 
@@ -166,11 +165,11 @@ def main():
             selected_paint = brands[selected_brand_index]
             min_cost, min_combination = calculate_paint_cost(paint_needed, selected_paint.pricing_options)
 
-            print(f"The cheapest combination for {paint_needed} litres of {selected_paint.brand} paint is:")
+            print(f"\nThe most cost-effective combination for {paint_needed} liters of {selected_paint.brand} paint is:")
             buckets_needed = 0
             for price, bucket_size in min_combination:
                 buckets_needed = math.ceil(paint_needed / bucket_size)
-                print(f"   {buckets_needed} buckets of {bucket_size} litres at £{price} per litre")
+                print(f"   {buckets_needed} buckets of {bucket_size} liters at £{price} per liter")
 
             print(f"The total cost is £{min_cost:.2f}.")
         else:
@@ -178,8 +177,8 @@ def main():
 
         exit_choice = input("Do you want to exit? (yes/no): ")
         if exit_choice.lower() == 'yes':
+            print("Thank you for using the Paint Estimation Tool. Goodbye!")
             break
-
 
 if __name__ == "__main__":
     main()
