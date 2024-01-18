@@ -48,6 +48,7 @@ def get_obstruction_details(valid_shapes):
                 for dimension in valid_shapes[shape]:
                     dimensions[dimension] = float(input(f"Enter the {dimension} of obstruction {i} in meters: "))
                 obstructions.append(Obstruction(shape, dimensions))
+                print(f" you have {len(obstruction_list)}, obstructions")
             else:
                 print(f"Invalid shape. Please enter one of: {', '.join(valid_shapes)}.")
 
