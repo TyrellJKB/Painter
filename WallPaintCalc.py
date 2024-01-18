@@ -31,15 +31,15 @@ def get_obstruction_details(valid_shapes):
     obstructions = []
 
     while True:
-        num_obstructions = input("Enter the number of obstructions or type 'skip' to continue: ")
+        num_obstructions = input("Enter the number of obstructions or type 'next' to continue: ")
 
-        if num_obstructions.lower() == 'skip':
+        if num_obstructions.lower() == 'next':
             break
 
         try:
             num_obstructions = int(num_obstructions)
         except ValueError:
-            print("Please enter a valid number or 'skip'.")
+            print("Please enter a valid number or 'next'.")
             continue
 
         for i in range(1, num_obstructions + 1):
@@ -92,72 +92,78 @@ def calculate_obstruction_size(ob):
 
 
 def main():
-    # Get obstruction details with valid shapes
-    valid_shapes = {
-        'square': ['side'],
-        'rectangle': ['width', 'height'],
-        'triangle': ['base', 'height'],
-        'semi_circle': ['radius'],
-        'circle': ['radius'],
-        'crescent_moon': ['outer_radius', 'inner_radius'],
-        'pentagon': ['side'],
-        'hexagon': ['side'],
-        'parallelogram': ['base', 'height'],
-        'trapezoid': ['base1', 'base2', 'height'],
-        'rhombus': ['side', 'angle'],
-    }
+    while True:
+        # Get obstruction details with valid shapes
+        valid_shapes = {
+            'square': ['side'],
+            'rectangle': ['width', 'height'],
+            'triangle': ['base', 'height'],
+            'semi_circle': ['radius'],
+            'circle': ['radius'],
+            'crescent_moon': ['outer_radius', 'inner_radius'],
+            'pentagon': ['side'],
+            'hexagon': ['side'],
+            'parallelogram': ['base', 'height'],
+            'trapezoid': ['base1', 'base2', 'height'],
+            'rhombus': ['side', 'angle'],
+        }
 
-    # Get wall dimensions
-    height = float(input("Enter the height of the walls in meters: "))
-    width = float(input("Enter the width of the walls in meters: "))
+        # Get wall dimensions
+        height = float(input("Enter the height of the walls in meters: "))
+        width = float(input("Enter the width of the walls in meters: "))
 
-    # Calculate wall size in square meters
-    wall_size = height * width
+        # Calculate wall size in square meters
+        wall_size = height * width
 
-    coats = int(input("Enter the number of coats you want to apply to your wall: "))
+        coats = int(input("Enter the number of coats you want to apply to your wall: "))
 
-    # Get obstruction details
-    obstruction_list = get_obstruction_details(valid_shapes)
+        # Get obstruction details
+        obstruction_list = get_obstruction_details(valid_shapes)
 
-    total_obstruction_size = sum(calculate_obstruction_size(ob) for ob in obstruction_list)
+        total_obstruction_size = sum(calculate_obstruction_size(ob) for ob in obstruction_list)
 
-    # Calculate paint needed considering obstructions
-    paint_needed = ((wall_size - total_obstruction_size) / 6) * coats
+        # Calculate paint needed considering obstructions
+        paint_needed = ((wall_size - total_obstruction_size) / 6) * coats
 
-    print(
-        f"With {len(obstruction_list)} obstruction(s) totaling {total_obstruction_size:.2f} square meters, you will need {paint_needed:.2f} litres of paint to paint walls with a total area of {wall_size:.2f} square meters."
-    )
+        print(
+            f"With {len(obstruction_list)} obstruction(s) totaling {total_obstruction_size:.2f} square meters, you will need {paint_needed:.2f} litres of paint to paint walls with a total area of {wall_size:.2f} square meters."
+        )
 
-    # Define paint brands with their respective prices and bucket sizes
-    delux_paint = Paint('Delux', [[('22', 2.5)], [('40', 5.0)]])
-    layland_paint = Paint('Layland', [[('18', 2.5)], [('33', 5.0)]])
-    goodhome_paint = Paint('Goodhome', [[('10', 2.5)], [('16', 5.0)]])
+        # Define paint brands with their respective prices and bucket sizes
+        delux_paint = Paint('Delux', [[('22', 2.5)], [('40', 5.0)]])
+        layland_paint = Paint('Layland', [[('18', 2.5)], [('33', 5.0)]])
+        goodhome_paint = Paint('Goodhome', [[('10', 2.5)], [('16', 5.0)]])
 
-    brands = [delux_paint, layland_paint, goodhome_paint]
+        brands = [delux_paint, layland_paint, goodhome_paint]
 
-    # Brand selection
-    print("Available brands:")
-    for i, paint in enumerate(brands, start=1):
-        print(f"{i}. {paint.brand}")
+        print("Available brands:")
+        for i, paint in enumerate(brands, start=1):
+            print(f"{i}. {paint.brand}")
 
-    selected_brand_index = int(input("Choose a paint brand number from the list: ")) - 1
+        selected_brand_index = int(input("Choose a paint brand number from the list: ")) - 1
 
-    if 0 <= selected_brand_index < len(brands):
-        selected_paint = brands[selected_brand_index]
-        min_cost, min_combination = calculate_paint_cost(paint_needed, selected_paint.pricing_options)
+        if 0 <= selected_brand_index < len(brands):
+            selected_paint = brands[selected_brand_index]
+            min_cost, min_combination = calculate_paint_cost(paint_needed, selected_paint.pricing_options)
 
-        print(f"The cheapest combination for {paint_needed} litres of {selected_paint.brand} paint is:")
-        for price, bucket_size in min_combination:
-            buckets_needed = math.ceil(paint_needed / bucket_size)
-            print(f"   {buckets_needed} buckets of {bucket_size} litres at £{price} per litre")
+            print(f"The cheapest combination for {paint_needed} litres of {selected_paint.brand} paint is:")
+            buckets_needed = 0  # Initialize buckets_needed outside the loop
+            for price, bucket_size in min_combination:
+                buckets_needed = math.ceil(paint_needed / bucket_size)
+                print(f"   {buckets_needed} buckets of {bucket_size} litres at £{price} per litre")
 
-        print(f"The total cost is £{min_cost:.2f}.")
-    else:
-        print("Invalid brand selection.")
+            print(f"The total cost is £{min_cost:.2f}.")
+        else:
+            print("Invalid brand selection.")
+
+        exit_choice = input("Do you want to exit? (yes/no): ")
+        if exit_choice.lower() == 'yes':
+            break
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
