@@ -1,3 +1,4 @@
+import math
 class Paint:
     def __init__(self, brand, pricing_options):
         self.brand = brand
@@ -62,6 +63,11 @@ valid_shapes = {
     'semi_circle': ['radius'],
     'circle': ['radius'],
     'crescent_moon': ['outer_radius', 'inner_radius'],
+    'pentagon': ['side'],
+    'hexagon': ['side'],
+    'parallelogram': ['base', 'height'],
+    'trapezoid': ['base1', 'base2', 'height'],
+    'rhombus': ['side', 'angle'],
 }
 
 # Get wall dimensions
@@ -91,6 +97,17 @@ def calculate_obstruction_size(ob):
         outer_area = 3.1415 * ob.dimensions['outer_radius'] * ob.dimensions['outer_radius']
         inner_area = 3.1415 * ob.dimensions['inner_radius'] * ob.dimensions['inner_radius']
         return outer_area - inner_area
+    elif ob.shape == 'pentagon':
+        return 0.25 * math.sqrt(5 * (5 + 2 * math.sqrt(5))) * ob.dimensions['side'] ** 2
+    elif ob.shape == 'hexagon':
+        return 1.5 * math.sqrt(3) * ob.dimensions['side'] ** 2
+    elif ob.shape == 'parallelogram':
+        return ob.dimensions['base'] * ob.dimensions['height']
+    elif ob.shape == 'trapezoid':
+        return 0.5 * (ob.dimensions['base1'] + ob.dimensions['base2']) * ob.dimensions['height']
+    elif ob.shape == 'rhombus':
+        return ob.dimensions['side'] ** 2 * math.sin(math.radians(ob.dimensions['angle']))
+
     else:
         raise ValueError(f"Unsupported shape: {ob.shape}")
 
